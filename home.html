@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome — Steel Energy Analytics Dashboard{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Steel Industry <span class="highlight">Energy Analytics</span></h1>
+    <p class="subtitle">
+        An advanced intelligence dashboard to analyze, visualize, and predict steel plant energy consumption using state-of-the-art machine learning algorithms.
+    </p>
+
+    <div class="card-grid">
+        <a href="/dashboard" class="card">
+            <h2>📊 Analytics Dashboard</h2>
+            <p>Explore exploratory data analysis visual insights including usage by hour, demand across load types, and correlation heatmaps.</p>
+        </a>
+        <a href="/predict" class="card">
+            <h2>🔮 Energy Prediction</h2>
+            <p>Input real-time electrical sensor measurements to get an instant prediction of <code>Usage_kWh</code> from our deployed XGBoost pipeline.</p>
+        </a>
+    </div>
+</section>
+
+<section class="info-section">
+    <h2 class="section-title">Technological Framework</h2>
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="info-card-icon">🧠</div>
+            <h3>Real-time XGBoost Prediction</h3>
+            <p>Leverages a tuned Extreme Gradient Boosting regressor pipeline to output accurate energy predictions based on plant electrical variables.</p>
+        </div>
+        <div class="info-card">
+            <div class="info-card-icon">📊</div>
+            <h3>Dimensionality Reduction via PCA</h3>
+            <p>Applies Principal Component Analysis to transform highly correlated electrical signals into orthogonal components, enhancing predictive performance.</p>
+        </div>
+        <div class="info-card">
+            <div class="info-card-icon">⚙️</div>
+            <h3>Feature Engineering & Extractors</h3>
+            <p>Automatically derives temporal components (day of week, hours, NSM) and transforms lagging/leading reactive power parameters dynamically.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

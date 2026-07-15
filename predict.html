@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Predict — Steel Energy Analytics{% endblock %}
+{% block nav_predict %}active{% endblock %}
+
+{% block content %}
+<section class="predict-section">
+    <h1>Energy Consumption Inference</h1>
+    <p class="subtitle">
+        Input raw sensor metrics below. The background preprocessor handles feature scaling, encoding, and PCA transformations before running the XGBoost model.
+    </p>
+
+    {% if error %}
+    <div class="alert-container">
+        <div class="alert alert-error">
+            <span>⚠️</span>
+            <div>{{ error }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if prediction is not none %}
+    <div class="prediction-box">
+        <div class="prediction-info">
+            <div class="prediction-label">Predicted Energy Usage</div>
+            <div class="prediction-value-container">
+                <span class="prediction-value">{{ prediction }}</span>
+                <span class="prediction-unit">kWh</span>
+            </div>
+        </div>
+        <div class="prediction-badge">⚡ Real-time Inference</div>
+    </div>
+    {% endif %}
+
+    <div class="predict-form-container">
+        <form method="post" action="/predict" class="predict-form">
+            <div class="form-group span-2">
+                <label for="date_time">Date &amp; Time</label>
+                <input type="datetime-local" id="date_time" name="date_time" required
+                       value="{{ form_values.date_time or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="nsm">NSM (Seconds Since Midnight)</label>
+                <input type="number" step="any" id="nsm" name="nsm" required placeholder="e.g. 0 - 86399"
+                       value="{{ form_values.nsm if form_values.nsm is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="lagging_reactive_power">Lagging Reactive Power (kVarh)</label>
+                <input type="number" step="any" id="lagging_reactive_power"
+                       name="lagging_reactive_power" required placeholder="0.00"
+                       value="{{ form_values.lagging_reactive_power if form_values.lagging_reactive_power is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="leading_reactive_power">Leading Reactive Power (kVarh)</label>
+                <input type="number" step="any" id="leading_reactive_power"
+                       name="leading_reactive_power" required placeholder="0.00"
+                       value="{{ form_values.leading_reactive_power if form_values.leading_reactive_power is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="co2">CO2 Emissions (tCO2)</label>
+                <input type="number" step="any" id="co2" name="co2" required placeholder="0.00"
+                       value="{{ form_values.co2 if form_values.co2 is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="lagging_power_factor">Lagging Power Factor</label>
+                <input type="number" step="any" id="lagging_power_factor"
+                       name="lagging_power_factor" required placeholder="0 - 100"
+                       value="{{ form_values.lagging_power_factor if form_values.lagging_power_factor is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="leading_power_factor">Leading Power Factor</label>
+                <input type="number" step="any" id="leading_power_factor"
+                       name="leading_power_factor" required placeholder="0 - 100"
+                       value="{{ form_values.leading_power_factor if form_values.leading_power_factor is defined else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="load_type">Load Type</label>
+                <select id="load_type" name="load_type" required>
+                    <option value="" disabled {% if not form_values.load_type %}selected{% endif %}>Select Load Type</option>
+                    {% for option in load_type_options %}
+                    <option value="{{ option }}" {% if form_values.load_type == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="week_status">Week Status</label>
+                <select id="week_status" name="week_status" required>
+                    <option value="" disabled {% if not form_values.week_status %}selected{% endif %}>Select Status</option>
+                    {% for option in week_status_options %}
+                    <option value="{{ option }}" {% if form_values.week_status == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="day_of_week">Day of Week</label>
+                <select id="day_of_week" name="day_of_week" required>
+                    <option value="" disabled {% if not form_values.day_of_week %}selected{% endif %}>Select Day</option>
+                    {% for option in day_of_week_options %}
+                    <option value="{{ option }}" {% if form_values.day_of_week == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-primary">
+                    <span>🔮</span> Predict Usage
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

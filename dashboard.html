@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Steel Energy Analytics{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<section class="dashboard-intro">
+    <h1>Exploratory Data Analysis</h1>
+    <p class="subtitle">
+        Visual insights from historical metrics of the steel manufacturing industry. These charts illustrate patterns of energy usage over time and key feature correlations.
+    </p>
+</section>
+
+<div class="chart-grid">
+    {% for chart in charts %}
+    <div class="chart-card {% if chart.filename == 'correlation_heatmap.png' %}heatmap-card{% endif %}">
+        <h2>{{ chart.title }}</h2>
+        <div class="img-wrapper">
+            <img src="/static/{{ chart.filename }}"
+                 alt="{{ chart.title }}"
+                 onerror="this.onerror=null;this.src='';this.alt='Chart file not found. Place {{ chart.filename }} in static/';this.classList.add('missing');">
+        </div>
+        <p class="chart-caption">
+            {% if chart.filename == 'energy_by_hour.png' %}
+            <strong>Operational Peak Analysis:</strong> Average power consumption peaks during standard business operating shifts, illustrating diurnal load cycles and capacity requirements.
+            {% elif chart.filename == 'energy_by_load_type.png' %}
+            <strong>Distribution by Demand Level:</strong> Clear segregation of energy footprint across designated load statuses (Maximum, Medium, Light), detailing raw usage variance.
+            {% elif chart.filename == 'correlation_heatmap.png' %}
+            <strong>System Multicollinearity & Drivers:</strong> Explores linear relationships between variables, illustrating how reactive power factors and carbon footprint correspond directly with active plant energy consumption.
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

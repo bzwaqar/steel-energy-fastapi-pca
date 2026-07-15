@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart
+joblib
+pandas
+
+# IMPORTANT: these three MUST match the versions installed in the Colab/notebook
+# environment that trained and saved model.joblib, or joblib.load() will fail
+# (or worse, silently misbehave) when unpickling the pipeline. Check with:
+#   import sklearn, xgboost, lightgbm
+#   print(sklearn.__version__, xgboost.__version__, lightgbm.__version__)
+# in the notebook, then update the pins below to match exactly before installing here.
+scikit-learn==1.6.1
+xgboost
+lightgbm
